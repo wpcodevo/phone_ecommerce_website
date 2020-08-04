@@ -13,8 +13,24 @@ exports.createCategory = catchAsync(async (req, res) => {
   });
 });
 
+const categoryTree = (parentId = '', docs) => {
+  const category = docs.filter((doc) => parentId === doc.parent);
+  const allCategories = [];
+  category.forEach((cat) => {
+    allCategories.push({
+      _id: cat._id,
+      name: cat.name,
+      slug: cat.slug,
+      children: categoryTree(cat._id, docs),
+    });
+  });
+
+  return allCategories;
+};
+
 exports.getAllCategory = catchAsync(async (req, res) => {
   const categories = await Category.find();
+  categoryTree('', categories);
 
   res.status(200).json({
     status: 'success',

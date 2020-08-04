@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const catchAsync = require('../modules/utils/error/catchAsync');
 
 const DB = process.env.MONGODB_URI.replace(
   '<PASSWORD>',
@@ -6,14 +7,18 @@ const DB = process.env.MONGODB_URI.replace(
 );
 
 const connectDB = async () => {
-  const con = await mongoose.connect(DB, {
-    useNewUrlParser: true,
-    useFindAndModify: false,
-    useUnifiedTopology: true,
-    useCreateIndex: true,
-  });
+  try {
+    const con = await mongoose.connect(DB, {
+      useNewUrlParser: true,
+      useFindAndModify: false,
+      useUnifiedTopology: true,
+      useCreateIndex: true,
+    });
 
-  console.log(`Database connected successfully on ${con.connection.host}`);
+    console.log(`Database connected successfully on ${con.connection.host}`);
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 module.exports = connectDB;

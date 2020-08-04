@@ -34,6 +34,10 @@ const productSchema = new mongoose.Schema(
       min: [1, 'Rating must be above 1.0'],
       max: [5, 'Rating must be below 5.0'],
     },
+    ratingsQuantity: {
+      type: Number,
+      default: 0,
+    },
     priceDiscount: {
       type: String,
       validate: {
@@ -63,16 +67,23 @@ const productSchema = new mongoose.Schema(
     category: {
       type: ObjectId,
       ref: 'Categories',
-      required: true,
+      required: [true, 'A product category must not be empty'],
     },
   },
   { timestamps: true }
 );
 
+// Virtual populate
+productSchema.virtual('reviews', {
+  ref: 'Review',
+  foreignField: 'product',
+  localField: '_id',
+});
+
 productSchema.pre(/^find/, function (next) {
   this.populate({
     path: 'categories',
-    select: '-_v',
+    select: '-_v name',
   });
   next();
 });

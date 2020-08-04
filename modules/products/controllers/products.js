@@ -11,7 +11,9 @@ exports.aliasTop10Products = (req, res, next) => {
 };
 
 exports.getAllProducts = catchAsync(async (req, res) => {
-  const features = new APIFeatures(Product.find(), req.query)
+  let filter = {};
+  if (req.params.categoryId) filter = { product: req.params.categoryId };
+  const features = new APIFeatures(Product.find(filter), req.query)
     .filter()
     .sort()
     .limitFields()
@@ -44,6 +46,8 @@ exports.getProductById = catchAsync(async (req, res, next) => {
 });
 
 exports.createProduct = catchAsync(async (req, res, next) => {
+  if (!req.body.category) req.body.category = req.params.categoryId;
+
   const newProduct = await Product.create(req.body);
 
   res.status(201).json({

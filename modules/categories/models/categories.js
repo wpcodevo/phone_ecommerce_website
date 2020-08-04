@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const slugify = require('slugify');
 
 const categoriesSchema = new mongoose.Schema(
   {
@@ -9,8 +10,21 @@ const categoriesSchema = new mongoose.Schema(
       maxlength: 32,
       unique: true,
     },
+    parent: String,
+    slug: String,
   },
   { timestamps: true }
 );
+
+categoriesSchema.virtual('products', {
+  ref: 'Product',
+  foreignField: 'category',
+  localField: '_id',
+});
+
+categoriesSchema.pre('save', function (next) {
+  this.slug = slugify(this.name, { lower: true });
+  next();
+});
 
 module.exports = mongoose.model('Categories', categoriesSchema);
