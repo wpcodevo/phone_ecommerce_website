@@ -13,6 +13,7 @@ const connectDB = require('./config/db');
 const productRouter = require('./modules/products/routes');
 const userRouter = require('./modules/users/routes');
 const categoryRouter = require('./modules/categories/routes');
+const reviewRouter = require('./modules/reviews/routes');
 
 const app = express();
 
@@ -56,6 +57,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/api/v1/products', productRouter);
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/categories', categoryRouter);
+app.use('/api/v1/reviews', reviewRouter);
 
 app.all('*', (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
