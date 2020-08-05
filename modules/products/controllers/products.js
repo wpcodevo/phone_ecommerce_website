@@ -2,6 +2,7 @@ const Product = require('../models/products');
 const APIFeatures = require('../../utils/apiFeatures');
 const catchAsync = require('../../utils/error/catchAsync');
 const AppError = require('../../utils/error/appError');
+// const factory = require('../../utils/factory');
 
 exports.aliasTop10Products = (req, res, next) => {
   req.query.limit = '10';
@@ -79,6 +80,8 @@ exports.updateProduct = catchAsync(async (req, res, next) => {
     },
   });
 });
+
+// exports.deleteProduct = factory.deleteOne(Product);
 
 exports.deleteProduct = catchAsync(async (req, res, next) => {
   const product = await Product.findByIdAndDelete(req.params.productId);

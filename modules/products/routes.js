@@ -11,7 +11,7 @@ router
   .post(productController.createProduct);
 
 router
-  .route('/:productId')
+  .route('/:id')
   .get(productController.getProductById)
   .patch(productController.updateProduct)
   .delete(
