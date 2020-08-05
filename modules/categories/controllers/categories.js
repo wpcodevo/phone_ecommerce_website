@@ -30,13 +30,14 @@ const categoryTree = (parentId = '', docs) => {
 
 exports.getAllCategory = catchAsync(async (req, res) => {
   const categories = await Category.find();
-  categoryTree('', categories);
+  console.log(req.body);
+  const newCategories = categoryTree('', categories);
 
   res.status(200).json({
     status: 'success',
-    results: categories.length,
+    results: newCategories.length,
     data: {
-      categories,
+      categories: newCategories,
     },
   });
 });
