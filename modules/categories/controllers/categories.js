@@ -2,6 +2,21 @@ const Category = require('../models/categories');
 const catchAsync = require('../../utils/error/catchAsync');
 const AppError = require('../../utils/error/appError');
 
+// const categoryTree = (parentId = '', docs) => {
+//   const category = docs.filter((doc) => parentId === doc.parent);
+//   const allCategories = [];
+//   category.forEach((cat) => {
+//     allCategories.push({
+//       _id: cat._id,
+//       name: cat.name,
+//       slug: cat.slug,
+//       children: categoryTree(cat._id, docs),
+//     });
+//   });
+
+//   return allCategories;
+// };
+
 exports.createCategory = catchAsync(async (req, res) => {
   const newCategory = await Category.create(req.body);
 
@@ -13,31 +28,15 @@ exports.createCategory = catchAsync(async (req, res) => {
   });
 });
 
-const categoryTree = (parentId = '', docs) => {
-  const category = docs.filter((doc) => parentId === doc.parent);
-  const allCategories = [];
-  category.forEach((cat) => {
-    allCategories.push({
-      _id: cat._id,
-      name: cat.name,
-      slug: cat.slug,
-      children: categoryTree(cat._id, docs),
-    });
-  });
-
-  return allCategories;
-};
-
 exports.getAllCategory = catchAsync(async (req, res) => {
   const categories = await Category.find();
-  console.log(req.body);
-  const newCategories = categoryTree('', categories);
+  // const newCategories = categoryTree('', categories);
 
   res.status(200).json({
     status: 'success',
-    results: newCategories.length,
+    results: categories.length,
     data: {
-      categories: newCategories,
+      categories,
     },
   });
 });
