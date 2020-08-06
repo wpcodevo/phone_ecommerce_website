@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const catchAsync = require('../modules/utils/error/catchAsync');
 
 const DB = process.env.MONGODB_URI.replace(
   '<PASSWORD>',
@@ -8,7 +7,7 @@ const DB = process.env.MONGODB_URI.replace(
 
 const connectDB = async () => {
   try {
-    const con = await mongoose.connect(DB, {
+    const con = await mongoose.connect(process.env.MONGODB_LOCAL, {
       useNewUrlParser: true,
       useFindAndModify: false,
       useUnifiedTopology: true,

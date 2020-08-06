@@ -5,29 +5,29 @@ const reviewRouter = require('../reviews/routes');
 
 const router = express.Router({ mergeParams: true });
 
+router.use('/:productId/reviews', reviewRouter);
+
 router
   .route('/')
-  .get(authController.protect, productController.getAllProducts)
-  .post(productController.createProduct);
+  .get(productController.getAllProducts)
+  .post(
+    authController.protect,
+    authController.restrictTo('admin'),
+    productController.createProduct
+  );
 
 router
   .route('/:id')
   .get(productController.getProductById)
-  .patch(productController.updateProduct)
+  .patch(
+    authController.protect,
+    authController.restrictTo('admin'),
+    productController.updateProduct
+  )
   .delete(
     authController.protect,
     authController.restrictTo('admin'),
     productController.deleteProduct
   );
-
-router.use('/:productId/reviews', reviewRouter);
-
-// router
-//   .route('/:productId/reviews')
-//   .post(
-//     authController.protect,
-//     authController.restrictTo('user'),
-//     reviewController.createReview
-//   );
 
 module.exports = router;

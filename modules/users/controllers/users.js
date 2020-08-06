@@ -1,6 +1,7 @@
 const User = require('../models/users');
 const catchAsync = require('../../utils/error/catchAsync');
 const AppError = require('../../utils/error/appError');
+const factory = require('../../utils/factory');
 
 const filterObj = (obj, ...allowedFields) => {
   const newObj = {};
@@ -9,18 +10,6 @@ const filterObj = (obj, ...allowedFields) => {
   });
   return newObj;
 };
-
-exports.getAllUsers = catchAsync(async (req, res, next) => {
-  const users = await User.find();
-
-  res.status(200).json({
-    status: 'success',
-    results: users.length,
-    data: {
-      users,
-    },
-  });
-});
 
 exports.updateMe = catchAsync(async (req, res, next) => {
   // 1) Create error if user POSTs password data
@@ -34,7 +23,7 @@ exports.updateMe = catchAsync(async (req, res, next) => {
   }
   // 2) Update user document
   const filteredBody = filterObj(req.body, 'name', 'email');
-  const updateUser = await User.findByIdAndUpdate(req.user.id, filteredBody, {
+  const updatedUser = await User.findByIdAndUpdate(req.user.id, filteredBody, {
     new: true,
     runValidators: true,
   });
@@ -42,7 +31,7 @@ exports.updateMe = catchAsync(async (req, res, next) => {
   res.status(200).json({
     status: 'success',
     data: {
-      user: updateUser,
+      user: updatedUser,
     },
   });
 });
@@ -56,30 +45,8 @@ exports.deleteMe = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.getUserById = catchAsync(async (req, res, next) => {
-  res.status(500).json({
-    status: 'error',
-    message: 'This route is not yet defined',
-  });
-});
-
-exports.createUser = catchAsync(async (req, res, next) => {
-  res.status(500).json({
-    status: 'error',
-    message: 'This route is not yet defined',
-  });
-});
-
-exports.updateUser = catchAsync(async (req, res, next) => {
-  res.status(500).json({
-    status: 'error',
-    message: 'This route is not yet defined',
-  });
-});
-
-exports.deleteUser = catchAsync(async (req, res, next) => {
-  res.status(500).json({
-    status: 'error',
-    message: 'This route is not yet defined',
-  });
-});
+exports.getAllUsers = factory.getAll(User);
+exports.getUserById = factory.getOne(User);
+exports.createUser = factory.createOne(User);
+exports.updateUser = factory.updateOne(User);
+exports.deleteUser = factory.deleteOne(User);

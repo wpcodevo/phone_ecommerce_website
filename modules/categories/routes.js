@@ -5,6 +5,8 @@ const productRouter = require('../products/routes');
 
 const router = express.Router();
 
+router.use('/:categoryId/products', productRouter);
+
 router
   .route('/')
   .get(categoryController.getAllCategory)
@@ -13,13 +15,9 @@ router
     authController.restrictTo('admin'),
     categoryController.createCategory
   );
-
-router.use('/:categoryId/products', productRouter);
-
-router.get('/:categoryId', categoryController.getCategoryById);
-
 router
-  .route('/:categoryId')
+  .route('/:id')
+  .get(categoryController.getCategoryById)
   .patch(
     authController.protect,
     authController.restrictTo('admin'),
