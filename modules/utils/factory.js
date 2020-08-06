@@ -69,17 +69,17 @@ exports.getOne = (Model, popOption) =>
 
 exports.getAll = (Model) =>
   catchAsync(async (req, res) => {
-    // Allow for nested reviews
-    let filterTwo = {};
-    if (req.params.productId) filterTwo = { product: req.params.productId };
+    let filter = {};
+    if (req.params.productId) {
+      // Allow for nested reviews
+      filter = { product: req.params.productId };
+    } else if (req.params.categoryId) {
+      // Allows for nested products
 
-    // Allows for nested products
-    let filterOne = {};
-    if (req.params.categoryId) filterOne = { category: req.params.categoryId };
-    const features = new APIFeatures(
-      Model.find(filterOne, filterTwo),
-      req.query
-    )
+      filter = { category: req.params.categoryId };
+    }
+
+    const features = new APIFeatures(Model.find(filter), req.query)
       .filter()
       .sort()
       .limitFields()

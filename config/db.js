@@ -7,7 +7,7 @@ const DB = process.env.MONGODB_URI.replace(
 
 const connectDB = async () => {
   try {
-    const con = await mongoose.connect(process.env.MONGODB_LOCAL, {
+    const con = await mongoose.connect(DB, {
       useNewUrlParser: true,
       useFindAndModify: false,
       useUnifiedTopology: true,
