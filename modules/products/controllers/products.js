@@ -13,7 +13,6 @@ exports.aliasTop10Products = (req, res, next) => {
 
 exports.getAllProducts = catchAsync(async (req, res) => {
   let filter = {};
-  console.log(req.params.categoryId);
   if (req.params.categoryId) filter = { products: req.params.categoryId };
   const features = new APIFeatures(Product.find(filter), req.query)
     .filter()
