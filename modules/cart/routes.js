@@ -1,15 +1,13 @@
-// const express = require('express');
-// const cartController = require('./controllers/cart');
+const express = require('express');
+const cartController = require('./controllers/cart');
 
-// const router = express.Router();
+const router = express.Router();
 
-// router
-//   .route('/')
-//   .get(cartController.getAllCart)
-//   .post(cartController.createCart);
+router
+  .route('/')
+  .get(cartController.getAllCartItems)
+  .post(cartController.createCartItem);
 
-// router
-//   .route('/:id')
-//   .get(cartController.getCart)
-//   .patch(cartController.updateCart)
-//   .delete(cartController.deleteCart);
+router.route('/:userId').patch(cartController.updateCartItem);
+
+module.exports = router;

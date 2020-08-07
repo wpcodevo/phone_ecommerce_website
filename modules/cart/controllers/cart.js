@@ -3,7 +3,7 @@ const catchAsync = require('../../utils/error/catchAsync');
 const Cart = require('../models/cart');
 const AppError = require('../../utils/error/appError');
 
-exports.getCartItem = catchAsync(async (req, res, next) => {
+exports.createCartItem = catchAsync(async (req, res, next) => {
   const cartItem = await Cart.findOne({ user: req.body.user });
   if (cartItem) {
     const item = cartItem.cart.find((el) => el.product === req.body.product);
@@ -65,7 +65,7 @@ exports.getCartItem = catchAsync(async (req, res, next) => {
   }
 });
 
-exports.getAllCart = catchAsync(async (req, res, next) => {
+exports.getAllCartItems = catchAsync(async (req, res, next) => {
   const cartItems = await Cart.find({ user: req.params.userId })
     .populate({
       path: 'product',
@@ -82,6 +82,26 @@ exports.getAllCart = catchAsync(async (req, res, next) => {
     results: cartItems.length,
     data: {
       cartItems,
+    },
+  });
+});
+
+exports.updateCartItem = catchAsync(async (req, res, next) => {
+  const { user, product, quantity, total } = req.body;
+  const newItem = await Cart.update(
+    { user, 'cart.product': product },
+    {
+      $set: {
+        'cart.$.quantity': quantity,
+        'cart.$.total': total,
+      },
+    }
+  );
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      cart: newItem,
     },
   });
 });
