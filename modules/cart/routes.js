@@ -1,7 +1,10 @@
 const express = require('express');
 const cartController = require('./controllers/cart');
+const authController = require('../auth/controller/auth');
 
 const router = express.Router();
+
+router.use(authController.protect, authController.restrictTo('user'));
 
 router
   .route('/')

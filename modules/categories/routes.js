@@ -15,6 +15,7 @@ router
     authController.restrictTo('admin'),
     categoryController.createCategory
   );
+
 router
   .route('/:id')
   .get(categoryController.getCategoryById)

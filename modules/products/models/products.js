@@ -73,8 +73,12 @@ const productSchema = new mongoose.Schema(
       required: [true, 'A product category must not be empty'],
     },
   },
-  { timestamps: true }
+  { timestamps: true },
+  { toJSON: { virtuals: true }, toObject: { virtuals: true } }
 );
+
+productSchema.index({ price: 1, ratingsAverage: -1 });
+productSchema.index({ slug: 1 });
 
 // Virtual populate
 productSchema.virtual('reviews', {
@@ -95,5 +99,6 @@ productSchema.pre('save', function (next) {
   this.slug = slugify(this.name, { lower: true });
   next();
 });
+const Product = mongoose.model('Product', productSchema);
 
-module.exports = mongoose.model('Product', productSchema);
+module.exports = Product;

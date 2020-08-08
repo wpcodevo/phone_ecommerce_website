@@ -102,6 +102,7 @@ exports.protect = catchAsync(async (req, res, next) => {
   }
 
   req.user = freshUser;
+  console.log(req.user.role);
 
   next();
 });
