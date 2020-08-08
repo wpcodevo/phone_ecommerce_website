@@ -12,7 +12,7 @@ exports.aliasTop10Products = (req, res, next) => {
 };
 
 exports.getAllProducts = factory.getAll(Product);
-exports.getProductById = factory.getOne(Product, { path: 'review' });
+exports.getProductById = factory.getOne(Product, { path: 'reviews' });
 exports.createProduct = factory.createOne(Product);
 exports.updateProduct = factory.updateOne(Product);
 exports.deleteProduct = factory.deleteOne(Product);

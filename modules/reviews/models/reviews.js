@@ -29,14 +29,16 @@ const reviewSchema = new mongoose.Schema(
   { toJSON: { virtuals: true }, toObject: { virtuals: true } }
 );
 
-// reviewSchema.pre(/^find/, function (next) {
-//   this.populate({
-//     path: 'user',
-//     select: 'name',
-//   });
+reviewSchema.index({ product: 1, user: 1 }, { unique: true });
 
-//   next();
-// });
+reviewSchema.pre(/^find/, function (next) {
+  this.populate({
+    path: 'user',
+    select: 'name',
+  });
+
+  next();
+});
 
 reviewSchema.statics.calcAverageRatings = async function (product) {
   const stats = await this.aggregate([
