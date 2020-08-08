@@ -3,7 +3,7 @@ const factory = require('../../utils/factory');
 
 exports.setProductUserId = (req, res, next) => {
   if (!req.body.product) req.body.product = req.params.productId;
-  if (!req.body.user) req.body.user = req.params.userId;
+  if (!req.body.user) req.body.user = req.user.id;
   next();
 };
 
