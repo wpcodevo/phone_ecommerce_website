@@ -19,7 +19,6 @@ function createCategoryList(categories, parentId = null) {
       slug: cat.slug,
       children: createCategoryList(categories, cat._id),
     });
-    console.log(cat);
   });
 
   return allCategories;
