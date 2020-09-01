@@ -1,36 +1,47 @@
 const Category = require('../models/categories');
 const factory = require('../../utils/factory');
+const catchAsync = require('../../utils/error/catchAsync');
+// const appError = require('../../utils/error/appError');
 
-// const categoryTree = (parentId = '', docs) => {
-//   const category = docs.filter((doc) => parentId === doc.parent);
-//   const allCategories = [];
-//   category.forEach((cat) => {
-//     allCategories.push({
-//       _id: cat._id,
-//       name: cat.name,
-//       slug: cat.slug,
-//       children: categoryTree(cat._id, docs),
-//     });
-//   });
+function createCategoryList(categories, parentId = null) {
+  const allCategories = [];
+  let category;
+  if (parentId === null) {
+    category = categories.filter((cate) => cate.parentId === undefined);
+  } else {
+    category = categories.filter((cate) => cate.parentId === parentId);
+  }
 
-//   return allCategories;
-// };
+  category.forEach((cat) => {
+    allCategories.push({
+      _id: cat._id,
+      name: cat.name,
+      slug: cat.slug,
+      children: createCategoryList(categories, cat._id),
+    });
+    console.log(cat);
+  });
 
-// exports.getAllCategory = catchAsync(async (req, res) => {
-//   const categories = await Category.find();
-//   // const newCategories = categoryTree('', categories);
+  return allCategories;
+}
 
-//   res.status(200).json({
-//     status: 'success',
-//     results: categories.length,
-//     data: {
-//       categories,
-//     },
-//   });
-// });
+exports.getAllCategory = catchAsync(async (req, res) => {
+  const categories = await Category.find({});
+
+  if (categories) {
+    const categoryList = createCategoryList(categories);
+
+    res.status(200).json({
+      status: 'success',
+      results: categoryList.length,
+      data: {
+        categoryList,
+      },
+    });
+  }
+});
 
 exports.createCategory = factory.createOne(Category);
-exports.getAllCategory = factory.getAll(Category);
 exports.getCategoryById = factory.getOne(Category);
 exports.updateCategory = factory.updateOne(Category);
 exports.deleteCategory = factory.deleteOne(Category);

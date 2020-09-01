@@ -37,7 +37,16 @@ exports.updateOne = (Model) =>
 
 exports.createOne = (Model) =>
   catchAsync(async (req, res, next) => {
-    if (!req.body.category) req.body.category = req.params.categoryId;
+    const categoryObj = {
+      name: req.body.name,
+      slug: req.body.slug,
+    };
+
+    if (req.body.parentId) {
+      categoryObj.parentId = req.body.parentId;
+    }
+
+    req.body = categoryObj;
 
     const doc = await Model.create(req.body);
 
@@ -73,10 +82,6 @@ exports.getAll = (Model) =>
     if (req.params.productId) {
       // Allow for nested reviews
       filter = { product: req.params.productId };
-    } else if (req.params.categoryId) {
-      // Allows for nested products
-
-      filter = { category: req.params.categoryId };
     }
 
     const features = new APIFeatures(Model.find(filter), req.query)

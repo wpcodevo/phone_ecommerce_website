@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const cart = require('../../cart/models/cart');
 
 const { ObjectId } = mongoose.Schema;
 
@@ -8,7 +9,6 @@ const orderSchema = new mongoose.Schema(
       type: ObjectId,
       ref: 'User',
     },
-
     order: [
       {
         product: { type: ObjectId, ref: 'Product' },
@@ -37,6 +37,10 @@ const orderSchema = new mongoose.Schema(
     orderDate: {
       type: Date,
       default: Date.now(),
+    },
+    isOrderCompleted: {
+      type: Boolean,
+      default: false,
     },
   },
   { timestamps: true }

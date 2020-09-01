@@ -10,7 +10,7 @@ const categoriesSchema = new mongoose.Schema(
       maxlength: 32,
       unique: true,
     },
-    // parent: String,
+    parentId: String,
     slug: String,
   },
   { timestamps: true }
